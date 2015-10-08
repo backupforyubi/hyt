@@ -1,0 +1,116 @@
+apt-get install xinetd
+
+vi /etc/xinetd.d/rsync 
+
+service rsync
+{
+        disable = no
+        socket_type     = stream
+        wait            = no
+        user            = root
+        server          = /usr/bin/rsync
+        server_args     = --daemon
+        log_on_failure  += USERID
+}
+
+
+uid     = www
+gid     = www
+use chroot      = yes
+max connections = 100
+pid file= /var/run/rsyncd.pid
+lock file = /var/run/rsync.lock
+log file= /var/log/rsyncd.log
+
+[zhaomu_web]
+path        = /www/cc.q.com.cn
+hosts allow = 10.204.3.55 10.204.3.66
+read only   = no
+comment = zhaomu website 
+exclude =  .svn/ .svn 
+
+
+---------------------------------------------
+
+
+
+root@rsync:/home/wwwroot/img/coupon# more /etc/rsyncd.conf 
+# sample rsyncd.conf configuration file
+
+# GLOBAL OPTIONS
+
+#motd file=/etc/motd
+#log file=/var/log/rsyncd
+# for pid file, do not use /var/run/rsync.pid if
+# you are going to run rsync out of the init.d script.
+# pid file=/var/run/rsyncd.pid
+
+uid     = www
+gid     = www
+use chroot      = yes
+max connections = 100
+pid file= /var/run/rsyncd.pid
+lock file = /var/run/rsync.lock
+log file= /var/log/rsyncd.log
+
+[cc_coupon_php]
+path        = /home/wwwroot/data/coupon/
+hosts allow = 10.204.3.55 10.204.3.66 10.66.201.145
+read only   = no
+comment = coupon data 
+exclude =  .svn/ .svn 
+
+[cc_coupon_img]
+path        = /home/wwwroot/img/coupon/
+hosts allow = 10.204.3.55 10.204.3.66 10.66.201.145
+read only   = no
+comment = coupon image 
+exclude =  .svn/ .svn 
+
+[cc_terminal_php]
+path        = /home/wwwroot/data/terminal/
+hosts allow = 10.204.3.55 10.204.3.66 10.66.201.145
+read only   = no
+comment = terminal data 
+exclude =  .svn/ .svn 
+
+
+
+rsync -vzrtopg --progress enjoy@10.7.0.30::cc_coupon_php /www/cc.q.com.cn/data/coupon/
+rsync -vzrtopg --progress enjoy@10.7.0.30::cc_coupon_img /www/cc.q.com.cn/img/coupon/
+
+
+rsync -vzrtopg --progress enjoy@10.7.0.30::cc_terminal_php
+
+
+http://www.cnblogs.com/itech/archive/2009/08/10/1542945.html
+
+rsync -vzrtopg --progress rsync user@10.10.10.109::web /data/
+
+
+######################################################################################3
+
+
+http://rsync.samba.org/
+
+
+motd file = /etc/rsyncd.motd
+log file = /var/log/rsyncd.log
+pid file = /var/run/rsyncd.pid
+lock file = /var/run/rsync.lock
+
+[simple_path_name]
+   path = /rsync_files_here
+   comment = My Very Own Rsync Server
+   uid = nobody
+   gid = nobody
+   read only = no
+   list = yes
+   auth users = username
+   secrets file = /etc/rsyncd.secrets
+   
+   
+   chmod 600 rsyncd.secrets
+
+   
+
