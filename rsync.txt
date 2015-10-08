@@ -42,6 +42,16 @@ rsync --daemon --config=/etc/rsyncd.conf
 生产环境
 rsync -av --password-file=/etc/rsyncd.pass /home/wwwroot/m2.jxch168.com/log www@172.16.168.44::jxch
 
+#!/bin/bash
+export JXCH_LOG=/home/wwwroot/m2.jxch168.com/log
+chown -R www.www ${JXCH_LOG}
+rsync -av --password-file=/etc/rsyncd.pass ${JXCH_LOG} www@172.16.168.44::jxch
+
+#5分钟同步一次网站业务日志到灾备服务器
+*/5 * * * * /data/backup/jxchlog_rsync_standby.sh > /dev/null 2>&1
+
+
+
 
 rsync -vzrtopg --progress --password-file=/etc/rsyncd.secrets www@10.10.10.109::web /data/
 
