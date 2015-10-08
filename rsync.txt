@@ -1,4 +1,52 @@
+#安装rsync服务器需要的
 apt-get install xinetd
+
+修改防火墙配置
+vi /etc/iptables.rules
+-A INPUT -s 172.16.168.80/32 -p tcp -m tcp --dport 873 -j ACCEPT
+-A INPUT -p tcp -m tcp --dport 873 -j DROP
+
+iptables-restore < /etc/iptables.rules
+
+#rsync配置，灾备机作为服务端
+vi /etc/rsyncd.conf
+uid     = www
+gid     = www
+use chroot      = yes
+max connections = 10
+
+read only = no
+write only = yes
+hosts allow = 
+
+motd file = /etc/rsyncd.motd
+pid file= /var/run/rsyncd.pid
+lock file = /var/run/rsyncd.lock
+log file= /var/log/rsyncd.log
+
+[jxchlog]
+path        = /data/www/m2.jxch168.com/log
+comment = website log
+#exclude =  .svn/ .svn
+auth users = www
+secrets file
+
+chmod 600 /etc/rsyncd.secrets
+
+
+以守护进程方式启动该服务：
+/usr/local/bin/rsync --daemon
+rsync --daemon --config=/etc/rsyncd.conf
+
+
+生产环境
+rsync -av --password-file=/etc/rsyncd.pass /home/wwwroot/m2.jxch168.com/log www@172.16.168.44::jxch
+
+
+rsync -vzrtopg --progress --password-file=/etc/rsyncd.secrets www@10.10.10.109::web /data/
+
+rsync -vzrtopg
+
 
 vi /etc/xinetd.d/rsync 
 
