@@ -51,6 +51,21 @@ rsync -av --password-file=/etc/rsyncd.pass ${JXCH_LOG} www@172.16.168.44::jxch
 */5 * * * * /data/backup/jxchlog_rsync_standby.sh > /dev/null 2>&1
 
 
+==========================================================================
+
+可以使用通配符 避开不想复制的内容
+比如--exclude “fire*”
+那么fire打头的文件或者文件夹全部不会被复制
+5如果想要避开复制的文件过多，可以这么写
+--exclude-from=/exclude.list
+
+最终：
+
+more jxchlog_rsync_standby.sh 
+#!/bin/bash
+JXCH_LOG=/home/wwwroot/m2.jxch168.com/log
+chown -R www.www ${JXCH_LOG}
+/usr/bin/rsync -av --exclude "fuyou/2015*_regAction.log" --password-file=/etc/rsyncd.pass ${JXCH_LOG} www@172.16.168.44::jxch
 
 
 rsync -vzrtopg --progress --password-file=/etc/rsyncd.secrets www@10.10.10.109::web /data/
