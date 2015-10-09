@@ -1,0 +1,46 @@
+fdisk -l
+#Disk /dev/vda: 10 GiB, 10737418240 bytes, 20971520 sectors
+
+fdisk /dev/vdb
+
+#输入n，新建分区
+Command (m for help): n
+
+#输入P，主分区
+Command action
+   e   extended
+   p   primary partition (1-4)
+p
+
+#目前是xvdb第一个分区输入1
+Partition number (1-4): 1
+
+#敲回车，默认就行了
+First cylinder (1-2871, default 1):
+Using default value 1
+Last cylinder or +size or +sizeM or +sizeK (1-2871, default 2871):
+Using default value 2871
+
+#这里输入t，指定分区的格式为8e (LVM)
+Command (m for help): t
+Selected partition 1
+Hex code (type L to list codes): 8e
+Changed system type of partition 1 to 8e (Linux LVM)
+
+#这里输入w，保存退出
+Command (m for help): w
+The partition table has been altered!
+Calling ioctl() to re-read partition table.
+Syncing disks.
+
+--------------------------------------------------------------------------------
+
+pvcreate /dev/vdb1
+
+vgextend VolGroup00 /dev/vdb1
+
+vgdisplay
+
+lvresize -L +10G /dev/VolGroup00/LogVol00
+resize2fs /dev/VolGroup00/LogVol00
+
