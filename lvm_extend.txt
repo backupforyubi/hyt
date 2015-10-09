@@ -1,7 +1,8 @@
 fdisk -l
 #Disk /dev/vda: 10 GiB, 10737418240 bytes, 20971520 sectors
 
-fdisk /dev/vdb
+
+fdisk /dev/vda
 
 #输入n，新建分区
 Command (m for help): n
@@ -21,6 +22,25 @@ Using default value 1
 Last cylinder or +size or +sizeM or +sizeK (1-2871, default 2871):
 Using default value 2871
 
+		Welcome to fdisk (util-linux 2.25.2).
+Changes will remain in memory only, until you decide to write them.
+Be careful before using the write command.
+
+Device does not contain a recognized partition table.
+Created a new DOS disklabel with disk identifier 0x76b32ca4.
+
+Command (m for help): n
+Partition type
+   p   primary (0 primary, 0 extended, 4 free)
+   e   extended (container for logical partitions)
+Select (default p): p
+Partition number (1-4, default 1): 
+First sector (2048-20971519, default 2048): 
+Last sector, +sectors or +size{K,M,G,T,P} (2048-20971519, default 20971519): 
+
+Created a new partition 1 of type 'Linux' and of size 10 GiB.
+
+
 #这里输入t，指定分区的格式为8e (LVM)
 Command (m for help): t
 Selected partition 1
@@ -35,12 +55,25 @@ Syncing disks.
 
 --------------------------------------------------------------------------------
 
-pvcreate /dev/vdb1
-
-vgextend VolGroup00 /dev/vdb1
+pvcreate /dev/vda1
 
 vgdisplay
 
-lvresize -L +10G /dev/VolGroup00/LogVol00
-resize2fs /dev/VolGroup00/LogVol00
+#vgextend VolGroup00 /dev/vda1
+
+vgextend demo-vg /dev/vda1
+
+vgdisplay
+
+lvdisplay
+
+#lvresize -L +10G /dev/VolGroup00/LogVol00
+
+lvresize -L +10G /dev/demo-vg/root
+
+
+#resize2fs /dev/VolGroup00/LogVol00
+
+resize2fs /dev/demo-vg/root
+
 
