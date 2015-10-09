@@ -1,0 +1,58 @@
+#!/bin/bash
+
+export JXCH_LOG=/data/www/m2.jxch168.com/log
+
+TODAY = `date +%Y-%m-%d`
+
+#for para in ()
+
+cd ${JXCH_LOG}
+
+#find ${JXCH_LOG} | grep `date +%Y` > /tmp/mylist
+
+find ${JXCH_LOG} | grep `date +%Y-%m-%d` > /tmp/mylist
+
+while read LINE; do echo "mkdir -p ${Target_Name}/"`dirname $LINE` >> ${Local_Path}/createdir; done < ${Local_Path}/package.list
+
+#while read LINE; do echo "ln -s $LINE /mnt/weblog/"`basename $LINE` > /tmp/myln.sh ; done < /tmp/mylist
+
+while read LINE; do echo "ln -s $LINE /mnt/weblog/"`basename $LINE`".txt" >> /tmp/myln.sh ; done < /tmp/mylist
+chmod +x /tmp/myln.sh
+sh /tmp/myln.sh
+rm -f /tmp/myln.sh
+
+
+
+autobid
+2015-10-09_autobid_log.log
+
+extension
+2015-10-08_appinput_callback.log
+2015-10-08_outinput_callback.log
+2015-10-08_output_callback.log
+
+fuyou  
+2015-10-08_BalanceAction.log
+2015-10-08_carrycashcallback.log
+2015-10-08_checkMoney.log
+2015-10-08_findInchargeCarryRecord.log
+2015-10-08_findTradeRecord.log
+2015-10-08_ordercallback.log
+2015-10-08_preAuth.log
+2015-10-08_transferBmu.log
+
+
+msg  
+2015-10-08.log
+
+userbonus  
+2015-09-15_user_deal_bonus.log    
+2015-09-30_user_invest_bonus.log  
+2015-10-08_user_over_bonus.log
+
+wap2mapi
+
+TODAY = `date +%Y-%m-%d`
+
+BACKUPDATE=`date +%Y%m%d`
+EXPIREDATE=`date -d "90 days ago" +%Y%m%d`
