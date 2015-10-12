@@ -50,8 +50,24 @@ rsync -av --password-file=/etc/rsyncd.pass ${JXCH_LOG} www@172.16.168.44::jxch
 #5分钟同步一次网站业务日志到灾备服务器
 */5 * * * * /data/backup/jxchlog_rsync_standby.sh > /dev/null 2>&1
 
+/usr/bin/rsync -av --password-file=/etc/rsyncd.pass /home/wwwroot/m2.jxch168.com/log www@172.16.168.44::jxch
+
 
 ==========================================================================
+
+#通过ln，实现重命名为txt后缀，方便浏览器显示（字符集需要改为utf-8）
+
+#!/bin/bash
+
+export JXCH_LOG=/data/www/m2.jxch168.com/log
+
+find ${JXCH_LOG} | grep `date +%Y` > /tmp/mylist
+
+while read LINE; do echo "ln -s $LINE /mnt/weblog/"`basename $LINE`".txt" >> /tmp/myln.sh ; done < /tmp/mylist
+
+cd /mnt/weblog
+
+while read LINE; do ln -s $LINE /mnt/weblog/`basename $LINE`.txt ; done < /tmp/mylist
 
 可以使用通配符 避开不想复制的内容
 比如--exclude “fire*”
