@@ -1,0 +1,111 @@
+php curl
+
+查看nginx编译参数：/usr/local/nginx/sbin/nginx -V
+
+查看apache编译参数：cat /usr/local/apache2/build/config.nice
+
+查看mysql编译参数：cat /usr/local/mysql/bin/mysqlbug | grep CONFIGURE_LINE
+
+查看php编译参数：/usr/local/php/bin/php -i | grep configure
+
+'./configure'  '--prefix=/usr/local/php' '--with-config-file-path=/usr/local/php/etc' '--enable-fpm' '--with-fpm-user=www' '--with-fpm-group=www' '--with-mysql=mysqlnd' '--with-mysqli=mysqlnd' '--with-pdo-mysql=mysqlnd' '--with-iconv-dir' '--with-freetype-dir=/usr/local/freetype' '--with-jpeg-dir' '--with-png-dir' '--with-zlib' '--with-libxml-dir=/usr' '--enable-xml' '--disable-rpath' '--enable-bcmath' '--enable-shmop' '--enable-sysvsem' '--enable-inline-optimization' '--with-curl' '--enable-mbregex' '--enable-mbstring' '--with-mcrypt' '--enable-ftp' '--with-gd' '--enable-gd-native-ttf' '--with-openssl' '--with-mhash' '--enable-pcntl' '--enable-sockets' '--with-xmlrpc' '--enable-zip' '--enable-soap' '--with-gettext' '--disable-fileinfo'
+
+'./configure'  '--prefix=/usr/local/php' '--with-config-file-path=/usr/local/php/etc' '--enable-fpm' '--with-fpm-user=www' '--with-fpm-group=www' '--with-mysql=mysqlnd' '--with-mysqli=mysqlnd' '--with-pdo-mysql=mysqlnd' '--with-iconv-dir' '--with-freetype-dir=/usr/local/freetype' '--with-jpeg-dir' '--with-png-dir' '--with-zlib' '--with-libxml-dir=/usr' '--enable-xml' '--disable-rpath' '--enable-bcmath' '--enable-shmop' '--enable-sysvsem' '--enable-inline-optimization' '--with-curl' '--enable-mbregex' '--enable-mbstring' '--with-mcrypt' '--enable-ftp' '--with-gd' '--enable-gd-native-ttf' '--with-openssl' '--with-mhash' '--enable-pcntl' '--enable-sockets' '--with-xmlrpc' '--enable-zip' '--enable-soap' '--with-gettext' '--disable-fileinfo'
+
+
+'./configure'  '--prefix=/opt/lnmp1.2/php' '--with-config-file-path=/opt/lnmp1.2/php/etc' '--enable-fpm' '--with-fpm-user=www' '--with-fpm-group=www' '--with-mysql=mysqlnd' '--with-mysqli=mysqlnd' '--with-pdo-mysql=mysqlnd' '--with-iconv-dir' '--with-freetype-dir=/opt/lnmp1.2/freetype' '--with-jpeg-dir' '--with-png-dir' '--with-zlib' '--with-libxml-dir' '--enable-xml' '--disable-rpath' '--enable-bcmath' '--enable-shmop' '--enable-sysvsem' '--enable-inline-optimization' '--with-curl=/opt/lnmp1.2/curl-7.42.1' '--enable-mbregex' '--enable-mbstring' '--with-mcrypt=/opt/lnmp1.2/libmcrypt-2.5.8' '--enable-ftp' '--with-gd' '--enable-gd-native-ttf' '--with-openssl' '--with-mhash' '--enable-pcntl' '--enable-sockets' '--with-xmlrpc' '--enable-zip' '--enable-soap' '--with-gettext' '--disable-fileinfo'
+
+./configure --prefix=/opt/lnmp1.2/php --with-config-file-path=/opt/lnmp1.2/php/etc --enable-fpm --with-fpm-user=www --with-fpm-group=www --with-mysql=mysqlnd --with-mysqli=mysqlnd --with-pdo-mysql=mysqlnd --with-iconv-dir --with-freetype-dir=/opt/lnmp1.2/freetype --with-jpeg-dir --with-png-dir --with-zlib --with-libxml-dir --enable-xml --disable-rpath --enable-bcmath --enable-shmop --enable-sysvsem --enable-inline-optimization --with-curl=/opt/lnmp1.2/curl-7.42.1 --enable-mbregex --enable-mbstring --with-mcrypt=/opt/lnmp1.2/libmcrypt-2.5.8 --enable-ftp --with-gd --enable-gd-native-ttf --with-openssl --with-mhash --enable-pcntl --enable-sockets --with-xmlrpc --enable-zip --enable-soap --with-gettext --disable-fileinfo
+
+
+
+##########################
+configure: error: xml2-config not found. Please check your libxml2 installation.
+##############################
+apt-get install libxml2-dev
+
+################################
+configure: error: Cannot find OpenSSL's libraries
+################################
+#apt-get -y install libcurl3-openssl-dev openssl
+#apt-get install libxpm-dev
+#apt-get install libncurses5-dev
+
+apt-get install cmake
+
+--with-openssl=/usr/include/openssl
+--with-openssl-dir=/usr/include/openssl
+
+--with-libdir=/lib/x86_64-linux-gnu
+
+
+#########################################
+checking whether to enable JIS-mapped Japanese font support in GD... no
+If configure fails try --with-webp-dir=<DIR>
+checking for jpeg_read_header in -ljpeg... yes
+configure: error: png.h not found.
+#########################################
+apt-get install libpng12-dev
+
+
+#########################
+configure: WARNING: unrecognized options: --with-mysql
+##########################3
+./configure --help|grep mysql
+  --with-mysqli=FILE      Include MySQLi support.  FILE is the path
+                          to mysql_config.  If no value or mysqlnd is passed
+  --enable-embedded-mysqli
+  --with-mysql-sock=SOCKPATH
+  --with-pdo-mysql=DIR    PDO: MySQL support. DIR is the MySQL base directory
+                          If no value or mysqlnd is passed as DIR, the
+  --enable-mysqlnd        Enable mysqlnd explicitly, will be done implicitly
+  --disable-mysqlnd-compression-support
+                          Disable support for the MySQL compressed protocol in mysqlnd
+  --with-zlib-dir=DIR     mysqlnd: Set the path to libz install prefix
+################################
+
+
+
+
+
+sudo apt-get  install  build-essential
+sudo apt-get install openssl 
+sudo apt-get install libssl-dev 
+apt-get install make
+apt-get install curl
+apt-get install libcurl4-gnutls-dev
+sudo apt-get install libjpeg-dev
+sudo apt-get install libpng-dev
+sudo apt-get install libmcrypt-dev
+sudo apt-get install libreadline6 libreadline6-dev
+
+
+  php5-common
+Suggested packages:
+  php5-user-cache
+The following NEW packages will be installed:
+  php5-common php5-curl
+
+IDN
+libz
+HTLM
+SPNEGO
+SSL
+SSPI
+
+
+array(26) { ["url"]=> string(22) "https://www.baidu.com/" ["content_type"]=> NULL ["http_code"]=> int(0) ["header_size"]=> int(0) ["request_size"]=> int(0) ["filetime"]=> int(-1) ["ssl_verify_result"]=> int(0) ["redirect_count"]=> int(0) ["total_time"]=> float(0) ["namelookup_time"]=> float(0) ["connect_time"]=> float(0) ["pretransfer_time"]=> float(0) ["size_upload"]=> float(0) ["size_download"]=> float(0) ["speed_download"]=> float(0) ["speed_upload"]=> float(0) ["download_content_length"]=> float(-1) ["upload_content_length"]=> float(-1) ["starttransfer_time"]=> float(0) ["redirect_time"]=> float(0) ["certinfo"]=> array(0) { } ["primary_ip"]=> string(0) "" ["primary_port"]=> int(0) ["local_ip"]=> string(0) "" ["local_port"]=> int(0) ["redirect_url"]=> string(0) "" } int(1) bool(false)
+
+"Android","iPhone","SymbianOS","Windows Phone","iPad","iPod"
+
+
+:%s/\/sdjfsd/\//g
+
+第一次：Windows 2008 Server R2 64位； 
+
+第二次：Windows 7 64位； 
+
+原因分析：操作系统是64位的，但发布的程序引用了一些32位的ddl，所以出现了兼容性的问题。 
+
+解决方案：IIS——应用程序池——高级设置——启用32位应用程序 ：true。
+  
