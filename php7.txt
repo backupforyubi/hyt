@@ -65,6 +65,81 @@ configure: WARNING: unrecognized options: --with-mysql
 ################################
 
 
+cp php.ini-development /usr/local/php/lib/php.ini
+cp /usr/local/php/etc/php-fpm.conf.default /usr/local/php/etc/php-fpm.conf
+cp /usr/local/php/etc/php-fpm.d/www.conf.default /usr/local/php/etc/php-fpm.d/www.conf
+cp -R ./sapi/fpm/php-fpm /etc/init.d/php-fpm
+##########################################################
+root@php7:/data/soft/php-7.0.0RC5# cp /opt/lnmp1.2/php/etc/php-fpm.
+php-fpm.conf.default  php-fpm.d/            
+root@php7:/data/soft/php-7.0.0RC5# cp /opt/lnmp1.2/php/etc/php-fpm.conf.default /opt/lnmp1.2/php/etc/php-fpm.conf
+root@php7:/data/soft/php-7.0.0RC5# cp /opt/lnmp1.2/php/etc/php-fpm.d/www.conf.default /opt/lnmp1.2/php/etc/php-fpm.d/www.conf
+root@php7:/data/soft/php-7.0.0RC5# cp -R ./sapi/fpm/php-fpm /etc/init.d/php-fpm
+
+ln -sf /opt/lnmp1.2/php/sbin/php-fpm /usr/bin/php-fpm
+ln -sf /opt/lnmp1.2/php/bin/php /usr/bin/php
+ln -sf /opt/lnmp1.2/php/bin/phpize /usr/bin/phpize
+ln -sf /opt/lnmp1.2/php/bin/pear /usr/bin/pear
+ln -sf /opt/lnmp1.2/php/bin/pecl /usr/bin/pecl
+
+#######################################################
+configure: WARNING: This bison version is not supported for regeneration of the Zend/PHP parsers (found: none, min: 204, excluded: ).
+configure: WARNING: You will need re2c 0.13.4 or later if you want to regenerate PHP parsers.
+configure: WARNING: This bison version is not supported for regeneration of the Zend/PHP parsers (found: none, min: 204, excluded: ).
+#######################################################
+apt-get install bison
+
+
+configure: WARNING: You will need re2c 0.13.4 or later if you want to regenerate PHP parsers.看了下说是要re2c这个东西.
+解决办法:
+wget http://sourceforge.net/projects/re2c/files/re2c/0.13.5/re2c-0.13.5.tar.gz/download
+tar zxf re2c-0.13.5.tar.gz && cd re2c-0.13.5
+./configure
+make && make install
+然后再去编译安装Fileinfo,就不会报re2c的错误了.
+
+#############################################
+php.ini
+#############################################
+
+    sed -i 's/post_max_size = 8M/post_max_size = 50M/g' /opt/lnmp1.2/php/etc/php.ini
+    sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 50M/g' /opt/lnmp1.2/php/etc/php.ini
+    sed -i 's/;date.timezone =/date.timezone = Asia\/Shanghai/g' /opt/lnmp1.2/php/etc/php.ini
+    sed -i 's/short_open_tag = Off/short_open_tag = On/g' /opt/lnmp1.2/php/etc/php.ini
+    sed -i 's/; cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g' /opt/lnmp1.2/php/etc/php.ini
+    sed -i 's/; cgi.fix_pathinfo=0/cgi.fix_pathinfo=0/g' /opt/lnmp1.2/php/etc/php.ini
+    sed -i 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g' /opt/lnmp1.2/php/etc/php.ini
+    sed -i 's/max_execution_time = 30/max_execution_time = 300/g' /opt/lnmp1.2/php/etc/php.ini
+    sed -i 's/disable_functions =.*/disable_functions = passthru,exec,system,chroot,scandir,chgrp,chown,shell_exec,proc_open,proc_get_status,popen,ini_alter,ini_restore,dl,openlog,syslog,readlink,symlink,popepassthru,stream_socket_server/g' /opt/lnmp1.2/php/etc/php.ini
+
+cat >>/opt/lnmp1.2/php/etc/php.ini<<EOF
+
+;eaccelerator
+
+;ionCube
+
+[Zend ZendGuard Loader]
+/opt/lnmp1.2/zend/ZendGuardLoader.so
+zend_loader.enable=1
+zend_loader.disable_licensing=0
+zend_loader.obfuscation_level_support=3
+zend_loader.license_path=
+
+;opcache
+[Zend Opcache]
+zend_extension=opcache.so
+opcache.memory_consumption=128
+opcache.interned_strings_buffer=8
+opcache.max_accelerated_files=4000
+opcache.revalidate_freq=60
+opcache.fast_shutdown=1
+opcache.enable_cli=1
+;opcache end
+
+;xcache
+;xcache end
+EOF
+
 
 
 
@@ -78,6 +153,7 @@ sudo apt-get install libjpeg-dev
 sudo apt-get install libpng-dev
 sudo apt-get install libmcrypt-dev
 sudo apt-get install libreadline6 libreadline6-dev
+
 
 
   php5-common
@@ -108,4 +184,180 @@ array(26) { ["url"]=> string(22) "https://www.baidu.com/" ["content_type"]=> NUL
 原因分析：操作系统是64位的，但发布的程序引用了一些32位的ddl，所以出现了兼容性的问题。 
 
 解决方案：IIS——应用程序池——高级设置——启用32位应用程序 ：true。
+
+#######################################################################
+
+
+    Ln_PHP_Bin
+
+    echo "Copy new php configure file..."
+    mkdir -p /usr/local/php/etc
+    \cp php.ini-production /usr/local/php/etc/php.ini
+
+    cd ${cur_dir}
+    # php extensions
+    echo "Modify php.ini......"
+    sed -i 's/post_max_size = 8M/post_max_size = 50M/g' /opt/lnmp1.2/php/etc/php.ini
+    sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 50M/g' /opt/lnmp1.2/php/etc/php.ini
+    sed -i 's/;date.timezone =/date.timezone = Asia\/Shanghai/g' /opt/lnmp1.2/php/etc/php.ini
+    sed -i 's/short_open_tag = Off/short_open_tag = On/g' /opt/lnmp1.2/php/etc/php.ini
+    sed -i 's/; cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g' /opt/lnmp1.2/php/etc/php.ini
+    sed -i 's/; cgi.fix_pathinfo=0/cgi.fix_pathinfo=0/g' /opt/lnmp1.2/php/etc/php.ini
+    sed -i 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g' /opt/lnmp1.2/php/etc/php.ini
+    sed -i 's/max_execution_time = 30/max_execution_time = 300/g' /opt/lnmp1.2/php/etc/php.ini
+    sed -i 's/disable_functions =.*/disable_functions = passthru,exec,system,chroot,scandir,chgrp,chown,shell_exec,proc_open,proc_get_status,popen,ini_alter,ini_restore,dl,openlog
+,syslog,readlink,symlink,popepassthru,stream_socket_server/g' /opt/lnmp1.2/php/etc/php.ini
+    Pear_Pecl_Set
+
+    echo "Install ZendGuardLoader for PHP 5.6..."
+    cd ${cur_dir}/src
+    if [ "${Is_64bit}" = "y" ] ; then
+        Download_Files ${Download_Mirror}/web/zend/zend-loader-php5.6-linux-x86_64.tar.gz
+        tar zxf zend-loader-php5.6-linux-x86_64.tar.gz
+        mkdir -p /usr/local/zend/
+        \cp zend-loader-php5.6-linux-x86_64/ZendGuardLoader.so /usr/local/zend/
+    else
+        Download_Files ${Download_Mirror}/web/zend/zend-loader-php5.6-linux-i386.tar.gz
+        tar zxf zend-loader-php5.6-linux-i386.tar.gz
+        mkdir -p /usr/local/zend/
+        \cp zend-loader-php5.6-linux-i386/ZendGuardLoader.so /usr/local/zend/
+    fi
+
+    echo "Write ZendGuardLoader to php.ini..."
+cat >>/opt/lnmp1.2/php/etc/php.ini<<EOF
+
+;eaccelerator
+
+;ionCube
+
+[Zend ZendGuard Loader]
+zend_extension=/usr/local/zend/ZendGuardLoader.so
+zend_loader.enable=1
+zend_loader.disable_licensing=0
+zend_loader.obfuscation_level_support=3
+zend_loader.license_path=
+
+;opcache
+[Zend Opcache]
+zend_extension=opcache.so
+opcache.memory_consumption=128
+opcache.interned_strings_buffer=8
+opcache.max_accelerated_files=4000
+opcache.revalidate_freq=60
+opcache.fast_shutdown=1
+opcache.enable_cli=1
+;opcache end
+
+;xcache
+;xcache end
+EOF
+
+echo "Copy Opcache Control Panel..."
+\cp ${cur_dir}/conf/ocp.php /home/wwwroot/default/ocp.php
+
+if [ "${Stack}" = "lnmp" ]; then
+    echo "Creating new php-fpm configure file..."
+    cat >/opt/lnmp1.2/php/etc/php-fpm.conf<<EOF
+[global]
+pid = /opt/lnmp1.2/php/var/run/php-fpm.pid
+error_log = /opt/lnmp1.2/php/var/log/php-fpm.log
+log_level = notice
+
+[www]
+listen = /tmp/php-cgi.sock
+listen.backlog = -1
+listen.allowed_clients = 127.0.0.1
+listen.owner = www
+listen.group = www
+listen.mode = 0666
+user = www
+group = www
+pm = dynamic
+pm.max_children = 10
+pm.start_servers = 2
+pm.min_spare_servers = 1
+pm.max_spare_servers = 6
+request_terminate_timeout = 100
+request_slowlog_timeout = 0
+slowlog = var/log/slow.log
+EOF
+
+php-cgi端口和nginx配置不一致，这是比较低级的错误，呵呵
+
+    echo "Copy php-fpm init.d file..."
+    \cp ${cur_dir}/src/${Php_Ver}/sapi/fpm/init.d.php-fpm /etc/init.d/php-fpm
+    chmod +x /etc/init.d/php-fpm
+fi
+}
+
+
+connect() to unix:/tmp/php-cgi.sock failed (13: Permission denied) while connecting to upstream, client: 172.16.168.44, server: test.jxch168.com, request: "GET /info.php HTTP/1.0", upstream: "fastcgi://unix:/tmp/php-cgi.sock:", host: "test.jxch168.com"
+################################################
+chown www.www php-cgi.sock
+
+;127.0.0.1:9000
+/tmp/php-cgi.sock
+
+
+####################################################
+find:
+set_magic_quotes_runtime(0);
+
+replace with:
+ini_set("magic_quotes_runtime", 0);
+
+enjoy!
+####################################################
+
+Warning: mkdir(): Permission denied in /data/www/test.jxch168.com/system/cache/CacheFileService.php on line 50
+
+Warning: mkdir(): No such file or directory in /data/www/test.jxch168.com/license.php on line 84
+
+Warning: mkdir(): No such file or directory in /data/www/test.jxch168.com/license.php on line 96
+
+Warning: mkdir(): No such file or directory in /data/www/test.jxch168.com/license.php on line 98
+
+######################################################
+chmod -R 775 /data/www/test.jxch168.com/public/runtime/
+
+
+###########################################################
+  579  dpkg -i jxchphp7_7.0.0RC5-2_amd64.deb 
+  580  php -m
+  581  php -m|grep opcache
+  582  cp php.ini-production /opt/lnmp1.2/php/etc/php.ini
+  583  cp sapi/fpm/init.d.php-fpm /etc/init.d/php7-fpm 
+  584  chmod +x /etc/init.d/php7-fpm 
+  585  cp /opt/lnmp1.2/php/etc/php-fpm.conf.default /opt/lnmp1.2/php/etc/php-fpm.conf
+  586  cp /opt/lnmp1.2/php/etc/php-fpm.d/www.conf.default /opt/lnmp1.2/php/etc/php-fpm.d/www.conf
+  587  find /opt/ -name opcache.so
+  588  vi /opt/lnmp1.2/php/etc/php.ini
+  589  /etc/init.d/php7-fpm start
+  590  touch /opt/lnmp1.2/php/var/log/php-fpm.log
+  591  mkdir -p /opt/lnmp1.2/php/var/log/
+  592  touch /opt/lnmp1.2/php/var/log/php-fpm.log
+  593  /etc/init.d/php7-fpm start
+  594  mkdir -p /opt/lnmp1.2/php/var/run/
+  595  touch /opt/lnmp1.2/php/var/run/php-fpm.pid
+  596  /etc/init.d/php7-fpm start
+  597  service nginx restart
+  598  tail -f /opt/lnmp1.2/php/var/log/php-fpm.log
+###########################################################
+
+
+find ./ -name \*.php -type f|xargs grep mysql_connect
+./admin/ThinkPHP/Mode/Thin/Db.class.php:                $this->linkID = mysql_connect( $host, $config['username'], $config['password'],true,CLIENT_MULTI_RESULTS);
+./admin/ThinkPHP/Mode/Lite/Db.class.php:                $this->linkID = mysql_connect( $host, $config['username'], $config['password'],true,CLIENT_MULTI_RESULTS);
+./admin/ThinkPHP/Lib/Think/Db/Driver/DbMysql.class.php:                $this->linkID[$linkNum] = mysql_connect( $host, $config['username'], $config['password'],true,CLIENT_MULTI_RESULTS);
+./uc_client/lib/db.class.php:			if(!$this->link = mysql_connect($dbhost, $dbuser, $dbpw)) {
+./system/db/db.php:			$this->link_list[$pid] = @ mysql_connect($dbhost, $dbuser, $dbpw, true);
+./system/db/db.php:			$this->link_list[$pid] = @ mysql_connect($dbhost, $dbuser, $dbpw);
+./system/db/db.php:				$this->link_id = @ mysql_connect($dbhost, $dbuser, $dbpw, true);
+./system/db/db.php:				$this->link_id = @ mysql_connect($dbhost, $dbuser, $dbpw);
+
+
+
+
+
+
   
