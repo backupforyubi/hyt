@@ -1,4 +1,6 @@
 #!/bin/bash
+PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
+export PATH
 
 mkdir -p /opt/lnmp1.2
 tar zxf mysql-5.6.23-linux-x86_64.tar.gz -C /opt/lnmp1.2/
@@ -76,3 +78,4 @@ systemctl enable mysql.service
 service mysql start
 
 /opt/lnmp1.2/mysql/bin/mysqladmin -u root password 'new-password'
+
