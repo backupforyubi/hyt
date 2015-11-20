@@ -126,28 +126,30 @@ interactive-timeout
 EOF
 
 
-    sed '/skip-external-locking/i\datadir = /usr/local/mysql/var' -i /etc/my.cnf
+    sed '/skip-external-locking/i\datadir = /data/mysql' -i /etc/my.cnf
     if [ "${InstallInnodb}" = "y" ]; then
         sed -i 's:#innodb:innodb:g' /etc/my.cnf
-        sed -i 's:/usr/local/mysql/data:/usr/local/mysql/var:g' /etc/my.cnf
+        sed -i 's:/usr/local/mysql/data:/data/mysql:g' /etc/my.cnf
     else
         sed -i '/skip-external-locking/i\innodb=OFF\nignore-builtin-innodb\nskip-innodb\ndefault-storage-engine=MyISAM\ndefault-tmp-storage-engine=MyISAM' /etc/my.cnf
         sed -i 's/#loose-innodb/loose-innodb/g' /etc/my.cnf
     fi
 
-    /usr/local/mysql/scripts/mysql_install_db --defaults-file=/etc/my.cnf --basedir=/usr/local/mysql --datadir=/usr/local/mysql/var --user=mysql
-    chown -R mysql /usr/local/mysql/var
-    chgrp -R mysql /usr/local/mysql/.
-    \cp support-files/mysql.server /etc/init.d/mysql
+    /opt/lnmp1.2/mysql/scripts/mysql_install_db --defaults-file=/etc/my.cnf --basedir=/opt/lnmp1.2/mysql --datadir=/data/mysql --user=mysql
+    chown -R mysql /data/mysql
+    chgrp -R mysql /opt/lnmp1.2/mysql/.
+	cp /opt/lnmp1.2/mysql/support-files/mysql.server /etc/init.d/mysql
+	
+    #\cp support-files/mysql.server /etc/init.d/mysql
     chmod 755 /etc/init.d/mysql
 
     cat > /etc/ld.so.conf.d/mysql.conf<<EOF
-    /usr/local/mysql/lib
+    /opt/lnmp1.2/mysql/lib
     /usr/local/lib
 EOF
     ldconfig
-    ln -sf /usr/local/mysql/lib/mysql /usr/lib/mysql
-    ln -sf /usr/local/mysql/include/mysql /usr/include/mysql
+    ln -sf /opt/lnmp1.2/mysql/lib/mysql /usr/lib/mysql
+    ln -sf /opt/lnmp1.2/mysql/include/mysql /usr/include/mysql
 
     MySQL_Sec_Setting
 }
